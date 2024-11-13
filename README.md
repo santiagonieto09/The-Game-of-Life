@@ -57,3 +57,7 @@ las generaciones.
 - Utiliza los botones en la parte inferior para iniciar, detener, avanzar, guardar o cargar el estado del juego.
 - Puedes borrar el tablero y confirmar la acción si es necesario.
 
+
+## Pantallas del Juego
+
+![image](https://github.com/user-attachments/assets/9e5ec818-85c8-44ad-a6fb-91f96ddf21e8)

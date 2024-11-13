@@ -98,7 +98,7 @@ existe una instancia, devuelve la instancia existente.
    ```
 2. Navega al directorio del proyecto:
    ```bash
-   cd juego-de-la-vida
+   cd The-Game-of-Life-main
    ```
 3. Ejecuta el archivo principal:
    ```bash

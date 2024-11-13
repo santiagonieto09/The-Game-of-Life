@@ -37,7 +37,7 @@ las generaciones.
   ![image](https://github.com/user-attachments/assets/02710e38-d727-46cb-9aa9-511d049402f8)
   
 ## Patrones de Diseño.
-- Modelo-Vista-Controlador (MVC):
+### Modelo-Vista-Controlador (MVC):
   
   ![image](https://github.com/user-attachments/assets/86d63f1f-15db-40d0-a71c-0b3dfe464021)
 
@@ -63,7 +63,7 @@ interacciones entre la Vista (Ventana) y el Modelo (JuegoDeLaVida).
 
 
 
-- Singleton:
+### Singleton:
   
 El patrón Singleton es un patrón de diseño de creación que garantiza que una clase
 tenga una única instancia y proporciona un punto de acceso global a ella. Este

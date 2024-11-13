@@ -18,6 +18,8 @@ las generaciones.
 ## Tabla de Contenidos
 
 - [Características](#características)
+- [Diseno de la implementacion](#diseño-de-la-implementación)
+- [Patrones de Diseño](#patrones-de-diseño)
 - [Requisitos](#requisitos)
 - [Instalación](#instalación)
 - [Uso](#uso)
@@ -34,7 +36,7 @@ las generaciones.
   
   ![image](https://github.com/user-attachments/assets/02710e38-d727-46cb-9aa9-511d049402f8)
   
-## Patrones de diseño.
+## Patrones de Diseño.
 - Modelo-Vista-Controlador (MVC):
   
   ![image](https://github.com/user-attachments/assets/86d63f1f-15db-40d0-a71c-0b3dfe464021)

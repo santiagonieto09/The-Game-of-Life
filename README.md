@@ -40,7 +40,7 @@ las generaciones.
 
 1. Clona el repositorio:
    ```bash
-   git clone https://github.com/tu_usuario/juego-de-la-vida.git
+   git clone https://github.com/tu_usuario/juego-de-la-vida.git](https://github.com/santiagonieto09/The-Game-of-Life.git
    ```
 2. Navega al directorio del proyecto:
    ```bash

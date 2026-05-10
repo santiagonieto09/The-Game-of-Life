@@ -36,8 +36,8 @@ def on_join(data):
         _desconectar_de_sala(sid)
     join_room(room)
     sid_rooms[sid] = room
-    salas_usuarios[room] = salas_usuarios.get(room, 0) + 1
     juego = get_o_crear_sala(room)
+    salas_usuarios[room] = salas_usuarios.get(room, 0) + 1
     emit("estado", juego.get_estado())
     _emitir_usuarios(room)
 

@@ -1,22 +1,11 @@
 from flask import Flask, render_template
 from flask_socketio import SocketIO, emit, join_room, leave_room
-from Controlador.controlador import api
-from Modelo.juegoDeLaVida import JuegoDeLaVida
+from Controlador.controlador import api, get_o_crear_sala
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "game-of-life-secret"
+app.config["MAX_CONTENT_LENGTH"] = 1 * 1024 * 1024  # 1 MB
 socketio = SocketIO(app, cors_allowed_origins="*")
-
-salas = {}
-DEFAULT_ANCHO = 60
-DEFAULT_LARGO = 35
-
-
-def get_o_crear_sala(room):
-    if room not in salas:
-        salas[room] = JuegoDeLaVida(DEFAULT_ANCHO, DEFAULT_LARGO)
-    return salas[room]
-
 
 app.register_blueprint(api)
 
@@ -118,4 +107,4 @@ def _run_simulation(room):
 
 
 if __name__ == "__main__":
-    socketio.run(app, host="0.0.0.0", port=5001, debug=True, allow_unsafe_werkzeug=True)
+    socketio.run(app, host="0.0.0.0", port=5000, debug=True, allow_unsafe_werkzeug=True)

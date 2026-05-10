@@ -1,5 +1,7 @@
 import json
 
+MAX_DIMENSION = 150
+
 
 class Archivo:
     _instance = None
@@ -22,11 +24,28 @@ class Archivo:
         try:
             if isinstance(data, str):
                 data = json.loads(data)
-            if "grid" in data and isinstance(data["grid"], list) and len(data["grid"]) == self.largo_grilla:
-                for row in data["grid"]:
-                    if not isinstance(row, list) or len(row) != self.ancho_grilla:
+
+            if not isinstance(data, dict) or "grid" not in data:
+                return None
+
+            grid = data["grid"]
+
+            if not isinstance(grid, list) or len(grid) != self.largo_grilla:
+                return None
+            if self.largo_grilla > MAX_DIMENSION or self.ancho_grilla > MAX_DIMENSION:
+                return None
+
+            sanitized = []
+            for row in grid:
+                if not isinstance(row, list) or len(row) != self.ancho_grilla:
+                    return None
+                sanitized_row = []
+                for cell in row:
+                    if not isinstance(cell, bool):
                         return None
-                return data["grid"]
+                    sanitized_row.append(cell)
+                sanitized.append(sanitized_row)
+
+            return sanitized
         except (json.JSONDecodeError, TypeError, KeyError):
             return None
-        return None

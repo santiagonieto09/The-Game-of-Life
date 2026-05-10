@@ -225,10 +225,20 @@
         gridHeightValue.textContent = gridHeight.value;
     });
 
+    function hayceldasVivas() {
+        for (let y = 0; y < largo; y++) {
+            for (let x = 0; x < ancho; x++) {
+                if (grid[y] && grid[y][x]) return true;
+            }
+        }
+        return false;
+    }
+
     btnResize.addEventListener("click", () => {
         const w = parseInt(gridWidth.value);
         const h = parseInt(gridHeight.value);
         if (w >= 10 && w <= 150 && h >= 10 && h <= 80) {
+            if (hayceldasVivas() && !confirm("El tablero tiene celdas vivas. ¿Desea redimensionar? Se perderán los datos.")) return;
             socket.emit("redimensionar", { room: currentRoom, ancho: w, largo: h });
             generation = 0;
         }
@@ -237,6 +247,7 @@
     btnPattern.addEventListener("click", () => {
         const id = patternSelect.value;
         if (!id) return;
+        if (hayceldasVivas() && !confirm("El tablero tiene celdas vivas. ¿Desea colocar el patrón? Se perderán los datos.")) return;
         socket.emit("patron", { room: currentRoom, patron_id: id });
         generation = 0;
     });
@@ -275,6 +286,11 @@
 
         if (file.size > 1024 * 1024) {
             showToast("El archivo es demasiado grande (máximo 1 MB)");
+            fileInput.value = "";
+            return;
+        }
+
+        if (hayceldasVivas() && !confirm("El tablero tiene celdas vivas. ¿Desea cargar un archivo? Se perderán los datos.")) {
             fileInput.value = "";
             return;
         }

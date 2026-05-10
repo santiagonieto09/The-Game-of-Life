@@ -15,7 +15,9 @@
     const speedSlider = document.getElementById("speed-slider");
     const speedValue = document.getElementById("speed-value");
     const gridWidth = document.getElementById("grid-width");
+    const gridWidthValue = document.getElementById("grid-width-value");
     const gridHeight = document.getElementById("grid-height");
+    const gridHeightValue = document.getElementById("grid-height-value");
     const patternSelect = document.getElementById("pattern-select");
     const genDisplay = document.getElementById("generation");
     const aliveDisplay = document.getElementById("alive-count");
@@ -52,7 +54,9 @@
         speedSlider.value = data.velocidad;
         speedValue.textContent = data.velocidad + "ms";
         gridWidth.value = ancho;
+        gridWidthValue.textContent = ancho;
         gridHeight.value = largo;
+        gridHeightValue.textContent = largo;
         generation = 0;
         updateUI();
         resizeCanvas();
@@ -213,6 +217,14 @@
         socket.emit("speed", { room: currentRoom, velocidad: parseInt(speedSlider.value) });
     });
 
+    gridWidth.addEventListener("input", () => {
+        gridWidthValue.textContent = gridWidth.value;
+    });
+
+    gridHeight.addEventListener("input", () => {
+        gridHeightValue.textContent = gridHeight.value;
+    });
+
     btnResize.addEventListener("click", () => {
         const w = parseInt(gridWidth.value);
         const h = parseInt(gridHeight.value);
@@ -282,7 +294,9 @@
                 ancho = data.ancho;
                 largo = data.largo;
                 gridWidth.value = ancho;
+                gridWidthValue.textContent = ancho;
                 gridHeight.value = largo;
+                gridHeightValue.textContent = largo;
                 generation = 0;
                 updateUI();
                 resizeCanvas();

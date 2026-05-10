@@ -45,11 +45,25 @@
 
                 <div class="panel">
                     <h3>Tamaño de Grilla</h3>
-                    <div class="size-controls">
-                        <label>Ancho: <input type="number" id="grid-width" value="60" min="10" max="150"></label>
-                        <label>Alto: <input type="number" id="grid-height" value="35" min="10" max="80"></label>
-                        <button id="btn-resize" class="btn btn-secondary">Aplicar</button>
+                    <div class="slider-group">
+                        <label>Ancho</label>
+                        <input type="range" id="grid-width" min="10" max="150" value="60" step="1">
+                        <div class="range-labels">
+                            <span>10</span>
+                            <span id="grid-width-value">60</span>
+                            <span>150</span>
+                        </div>
                     </div>
+                    <div class="slider-group">
+                        <label>Alto</label>
+                        <input type="range" id="grid-height" min="10" max="80" value="35" step="1">
+                        <div class="range-labels">
+                            <span>10</span>
+                            <span id="grid-height-value">35</span>
+                            <span>80</span>
+                        </div>
+                    </div>
+                    <button id="btn-resize" class="btn btn-secondary btn-full">Aplicar tamaño</button>
                 </div>
 
                 <div class="panel">

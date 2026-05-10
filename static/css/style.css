@@ -257,24 +257,21 @@ input[type="range"]::-moz-range-thumb {
 }
 
 /* Size controls */
-.size-controls {
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
+.slider-group {
+    margin-bottom: 0.6rem;
 }
 
-.size-controls label {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
+.slider-group label {
     font-size: 0.8rem;
     color: var(--text-muted);
-    white-space: nowrap;
+    display: block;
+    margin-bottom: 0.2rem;
 }
 
-.size-controls input {
-    width: 70px;
+.btn-full {
+    width: 100%;
 }
+
 
 /* File label */
 .file-label {

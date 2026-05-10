@@ -71,11 +71,3 @@ En cada generación se aplican estas reglas a todas las celdas:
 
 ## Despliegue
 
-Para producción, usa `gunicorn` con `eventlet`:
-
-```bash
-pip install gunicorn eventlet
-gunicorn -k eventlet -w 1 app:app --bind 0.0.0.0:5000
-```
-
-Compatible con Render, Railway, Heroku y cualquier VPS.

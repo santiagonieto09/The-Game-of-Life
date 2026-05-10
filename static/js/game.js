@@ -21,6 +21,7 @@
     const patternSelect = document.getElementById("pattern-select");
     const genDisplay = document.getElementById("generation");
     const aliveDisplay = document.getElementById("alive-count");
+    const userCount = document.getElementById("user-count");
     const toast = document.getElementById("toast");
 
     let grid = [];
@@ -61,6 +62,10 @@
         updateUI();
         resizeCanvas();
         drawGrid();
+    });
+
+    socket.on("usuarios", (data) => {
+        userCount.textContent = data.count;
     });
 
     socket.on("update_grid", (data) => {

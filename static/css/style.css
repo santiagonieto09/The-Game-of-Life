@@ -215,6 +215,14 @@ select {
     font-size: 0.72rem;
     color: var(--text-muted);
     margin-top: 0.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.viewers {
+    color: var(--primary);
+    font-weight: 600;
 }
 
 /* Range slider */

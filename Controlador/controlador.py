@@ -3,18 +3,43 @@ from Modelo.juegoDeLaVida import JuegoDeLaVida
 from Modelo.patrones import get_lista_patrones, get_patron
 import io
 import json
+import time
 
 api = Blueprint("api", __name__)
 
 salas = {}
+salas_usuarios = {}
+salas_actividad = {}
 DEFAULT_ANCHO = 60
 DEFAULT_LARGO = 35
+TIMEOUT_INACTIVIDAD = 5 * 60  # 5 minutos
 
 
 def get_o_crear_sala(room):
     if room not in salas:
         salas[room] = JuegoDeLaVida(DEFAULT_ANCHO, DEFAULT_LARGO)
+        salas_usuarios[room] = 0
+    registrar_actividad(room)
     return salas[room]
+
+
+def registrar_actividad(room):
+    salas_actividad[room] = time.time()
+
+
+def sala_inactiva(room):
+    ultima = salas_actividad.get(room, 0)
+    return (time.time() - ultima) > TIMEOUT_INACTIVIDAD
+
+
+def sala_vacia(room):
+    return salas_usuarios.get(room, 0) <= 0
+
+
+def limpiar_sala(room):
+    salas.pop(room, None)
+    salas_usuarios.pop(room, None)
+    salas_actividad.pop(room, None)
 
 
 @api.route("/api/estado")

@@ -1,6 +1,9 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request
 from flask_socketio import SocketIO, emit, join_room, leave_room
-from Controlador.controlador import api, get_o_crear_sala
+from Controlador.controlador import (
+    api, get_o_crear_sala, salas_usuarios, registrar_actividad,
+    sala_inactiva, sala_vacia, limpiar_sala,
+)
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "game-of-life-secret"
@@ -22,23 +25,56 @@ def index():
 
 # --- WebSocket events ---
 
+sid_rooms = {}
+
+
 @socketio.on("join")
 def on_join(data):
     room = data.get("room", "default")
+    sid = request.sid
+    if sid in sid_rooms:
+        _desconectar_de_sala(sid)
     join_room(room)
+    sid_rooms[sid] = room
+    salas_usuarios[room] = salas_usuarios.get(room, 0) + 1
     juego = get_o_crear_sala(room)
     emit("estado", juego.get_estado())
+    _emitir_usuarios(room)
 
 
 @socketio.on("leave")
 def on_leave(data):
-    room = data.get("room", "default")
+    _desconectar_de_sala(request.sid)
+
+
+@socketio.on("disconnect")
+def on_disconnect():
+    _desconectar_de_sala(request.sid)
+
+
+def _desconectar_de_sala(sid):
+    room = sid_rooms.pop(sid, None)
+    if room is None:
+        return
     leave_room(room)
+    salas_usuarios[room] = max(0, salas_usuarios.get(room, 1) - 1)
+    if sala_vacia(room):
+        juego = get_o_crear_sala(room)
+        if not juego.paused:
+            juego.paused = True
+        limpiar_sala(room)
+    else:
+        _emitir_usuarios(room)
+
+
+def _emitir_usuarios(room):
+    socketio.emit("usuarios", {"count": salas_usuarios.get(room, 0)}, to=room)
 
 
 @socketio.on("start")
 def on_start(data):
     room = data.get("room", "default")
+    registrar_actividad(room)
     juego = get_o_crear_sala(room)
     juego.paused = False
     emit("estado", juego.get_estado(), to=room)
@@ -48,6 +84,7 @@ def on_start(data):
 @socketio.on("stop")
 def on_stop(data):
     room = data.get("room", "default")
+    registrar_actividad(room)
     juego = get_o_crear_sala(room)
     juego.paused = True
     emit("estado", juego.get_estado(), to=room)
@@ -56,6 +93,7 @@ def on_stop(data):
 @socketio.on("speed")
 def on_speed(data):
     room = data.get("room", "default")
+    registrar_actividad(room)
     juego = get_o_crear_sala(room)
     juego.velocidad = max(50, min(2000, int(data.get("velocidad", 100))))
     emit("estado", juego.get_estado(), to=room)
@@ -64,6 +102,7 @@ def on_speed(data):
 @socketio.on("toggle_celda")
 def on_toggle(data):
     room = data.get("room", "default")
+    registrar_actividad(room)
     juego = get_o_crear_sala(room)
     juego.toggle_celda(data["x"], data["y"])
     emit("update_grid", {"grid": juego.grid}, to=room)
@@ -72,6 +111,7 @@ def on_toggle(data):
 @socketio.on("borrar")
 def on_borrar(data):
     room = data.get("room", "default")
+    registrar_actividad(room)
     juego = get_o_crear_sala(room)
     juego.borrar()
     emit("estado", juego.get_estado(), to=room)
@@ -81,6 +121,7 @@ def on_borrar(data):
 def on_patron(data):
     from Modelo.patrones import get_patron
     room = data.get("room", "default")
+    registrar_actividad(room)
     juego = get_o_crear_sala(room)
     celdas = get_patron(data.get("patron_id"))
     if celdas:
@@ -93,6 +134,7 @@ def on_patron(data):
 @socketio.on("redimensionar")
 def on_redimensionar(data):
     room = data.get("room", "default")
+    registrar_actividad(room)
     juego = get_o_crear_sala(room)
     juego.redimensionar(int(data["ancho"]), int(data["largo"]))
     emit("estado", juego.get_estado(), to=room)
@@ -100,8 +142,10 @@ def on_redimensionar(data):
 
 def _run_simulation(room):
     juego = get_o_crear_sala(room)
-    if juego.paused:
+    if juego.paused or sala_vacia(room) or sala_inactiva(room):
+        juego.paused = True
         return
+    registrar_actividad(room)
     tablero_vacio = juego.avanzar()
     socketio.emit("update_grid", {"grid": juego.grid, "tablero_vacio": tablero_vacio, "paused": juego.paused}, to=room)
     if tablero_vacio:

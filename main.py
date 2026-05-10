@@ -1,7 +1,4 @@
-import tkinter as tk
-from Vista.ventana import Ventana
+from app import app, socketio
 
 if __name__ == "__main__":
-    raiz = tk.Tk()
-    vista = Ventana(raiz)
-    raiz.mainloop()
+    socketio.run(app, host="0.0.0.0", port=5000, debug=True, allow_unsafe_werkzeug=True)

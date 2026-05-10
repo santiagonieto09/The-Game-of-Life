@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego de la Vida</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="app">
+        <header>
+            <h1>Juego de la Vida</h1>
+            <p class="subtitle">Conway's Game of Life</p>
+        </header>
+
+        <div class="main-layout">
+            <aside class="sidebar">
+                <div class="panel">
+                    <h3>Sala</h3>
+                    <div class="input-group">
+                        <input type="text" id="room-input" value="default" placeholder="Nombre de sala">
+                        <button id="btn-join" class="btn btn-secondary">Unirse</button>
+                    </div>
+                    <p class="hint" id="room-status">Sala: default</p>
+                </div>
+
+                <div class="panel">
+                    <h3>Controles</h3>
+                    <div class="btn-grid">
+                        <button id="btn-start" class="btn btn-primary">Iniciar</button>
+                        <button id="btn-step" class="btn btn-secondary">Avanzar</button>
+                        <button id="btn-clear" class="btn btn-danger">Borrar</button>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <h3>Velocidad</h3>
+                    <input type="range" id="speed-slider" min="50" max="2000" value="100" step="50">
+                    <div class="range-labels">
+                        <span>Rápido</span>
+                        <span id="speed-value">100ms</span>
+                        <span>Lento</span>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <h3>Tamaño de Grilla</h3>
+                    <div class="size-controls">
+                        <label>Ancho: <input type="number" id="grid-width" value="60" min="10" max="150"></label>
+                        <label>Alto: <input type="number" id="grid-height" value="35" min="10" max="80"></label>
+                        <button id="btn-resize" class="btn btn-secondary">Aplicar</button>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <h3>Patrones</h3>
+                    <select id="pattern-select">
+                        <option value="">-- Seleccionar --</option>
+                    </select>
+                    <button id="btn-pattern" class="btn btn-secondary">Colocar</button>
+                </div>
+
+                <div class="panel">
+                    <h3>Archivo</h3>
+                    <div class="btn-grid">
+                        <button id="btn-save" class="btn btn-secondary">Guardar</button>
+                        <label class="btn btn-secondary file-label">
+                            Cargar
+                            <input type="file" id="file-input" accept=".json" hidden>
+                        </label>
+                    </div>
+                </div>
+            </aside>
+
+            <main class="canvas-container">
+                <canvas id="game-canvas"></canvas>
+                <div id="toast" class="toast hidden"></div>
+            </main>
+        </div>
+
+        <footer>
+            <p>Generación: <span id="generation">0</span></p>
+            <p>Celdas vivas: <span id="alive-count">0</span></p>
+        </footer>
+    </div>
+
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <script src="/static/js/game.js"></script>
+</body>
+</html>

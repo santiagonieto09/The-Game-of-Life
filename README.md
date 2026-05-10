@@ -69,5 +69,6 @@ En cada generación se aplican estas reglas a todas las celdas:
 - **Salas**: Únete a una sala para editar colaborativamente con otros usuarios.
 - **Guardar/Cargar**: Descarga o sube el estado del tablero como archivo JSON.
 
-## Despliegue
+## Despliegue 🚀​
 
+https://the-game-of-life.onrender.com/

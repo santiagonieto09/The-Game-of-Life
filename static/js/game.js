@@ -254,14 +254,27 @@
     fileInput.addEventListener("change", () => {
         const file = fileInput.files[0];
         if (!file) return;
+
+        if (!file.name.toLowerCase().endsWith(".json")) {
+            showToast("Solo se permiten archivos .json");
+            fileInput.value = "";
+            return;
+        }
+
+        if (file.size > 1024 * 1024) {
+            showToast("El archivo es demasiado grande (máximo 1 MB)");
+            fileInput.value = "";
+            return;
+        }
+
         const form = new FormData();
         form.append("file", file);
         form.append("room", currentRoom);
         fetch("/api/cargar", { method: "POST", body: form })
-            .then((r) => r.json())
-            .then((data) => {
-                if (data.error) {
-                    showToast(data.error);
+            .then((r) => r.json().then((data) => ({ ok: r.ok, data })))
+            .then(({ ok, data }) => {
+                if (!ok || data.error) {
+                    showToast(data.error || "Error al cargar el archivo");
                     return;
                 }
                 grid = data.grid;
@@ -275,7 +288,8 @@
                 resizeCanvas();
                 drawGrid();
                 showToast("Archivo cargado");
-            });
+            })
+            .catch(() => showToast("Error al procesar el archivo"));
         fileInput.value = "";
     });
 

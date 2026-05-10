@@ -18,7 +18,9 @@ class Archivo:
     def guardar(self, grid):
         if all(not any(row) for row in grid):
             return None
-        return json.dumps({"grid": grid})
+        largo = len(grid)
+        ancho = len(grid[0]) if largo > 0 else 0
+        return json.dumps({"ancho": ancho, "largo": largo, "grid": grid})
 
     def cargar(self, data):
         try:
@@ -29,15 +31,20 @@ class Archivo:
                 return None
 
             grid = data["grid"]
-
-            if not isinstance(grid, list) or len(grid) != self.largo_grilla:
+            if not isinstance(grid, list) or len(grid) == 0:
                 return None
-            if self.largo_grilla > MAX_DIMENSION or self.ancho_grilla > MAX_DIMENSION:
+
+            largo = len(grid)
+            ancho = len(grid[0]) if isinstance(grid[0], list) else 0
+
+            if ancho == 0 or largo == 0:
+                return None
+            if ancho > MAX_DIMENSION or largo > MAX_DIMENSION:
                 return None
 
             sanitized = []
             for row in grid:
-                if not isinstance(row, list) or len(row) != self.ancho_grilla:
+                if not isinstance(row, list) or len(row) != ancho:
                     return None
                 sanitized_row = []
                 for cell in row:
@@ -46,6 +53,6 @@ class Archivo:
                     sanitized_row.append(cell)
                 sanitized.append(sanitized_row)
 
-            return sanitized
+            return {"ancho": ancho, "largo": largo, "grid": sanitized}
         except (json.JSONDecodeError, TypeError, KeyError):
             return None

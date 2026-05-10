@@ -66,9 +66,12 @@ class JuegoDeLaVida:
 
     def cargar(self, data):
         archivo = Archivo(self.ancho_grilla, self.largo_grilla)
-        loaded_grid = archivo.cargar(data)
-        if loaded_grid:
-            self.grid = loaded_grid
+        resultado = archivo.cargar(data)
+        if resultado:
+            self.ancho_grilla = resultado["ancho"]
+            self.largo_grilla = resultado["largo"]
+            self.grid = resultado["grid"]
+            self.paused = True
             return True
         return False
 

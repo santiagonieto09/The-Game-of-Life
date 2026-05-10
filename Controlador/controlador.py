@@ -94,7 +94,7 @@ def cargar():
     if not isinstance(data, dict):
         return jsonify({"error": "Formato de archivo no reconocido"}), 400
 
-    allowed_keys = {"grid"}
+    allowed_keys = {"grid", "ancho", "largo"}
     if not set(data.keys()).issubset(allowed_keys):
         return jsonify({"error": "El archivo contiene campos no permitidos"}), 400
 

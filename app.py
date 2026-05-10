@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify
 from flask_socketio import SocketIO, emit, join_room, leave_room
 from Controlador.controlador import api, get_o_crear_sala
 
@@ -8,6 +8,11 @@ app.config["MAX_CONTENT_LENGTH"] = 1 * 1024 * 1024  # 1 MB
 socketio = SocketIO(app, cors_allowed_origins="*")
 
 app.register_blueprint(api)
+
+
+@app.errorhandler(413)
+def archivo_muy_grande(e):
+    return jsonify({"error": "El archivo es demasiado grande (máximo 1 MB)"}), 413
 
 
 @app.route("/")
